@@ -1,0 +1,187 @@
+<html>
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h4 { color:steelblue; font-size:24px; margin-top:5px; }
+		button { margin:0 3px 5px; font-size:12px; }
+                div {width:300px;height:250px;border:1px dashed #000}
+	</style>
+	<script>
+	//注册 WebViewJavascriptBridge
+	function connectWebViewJavascriptBridge(callback) {
+    	if (window.WebViewJavascriptBridge) {
+        	callback(WebViewJavascriptBridge);
+    	} else {
+			document.addEventListener('WebViewJavascriptBridgeReady', function() {
+				callback(WebViewJavascriptBridge);
+			}, false);
+    	}
+	}
+	//初始化 WebViewJavascriptBridge
+	connectWebViewJavascriptBridge(function(bridge) {
+    	//初始化操作，并定义默认的消息处理逻辑
+    	bridge.init(function(message, responseCallback) {
+			var data = { 'JS Result':'from javascript!' }
+			responseCallback(data)
+    	});
+    	//注册一个名为testJavascriptHandler的处理器，并定义用于响应的处理逻辑
+    	bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
+			var responseData = { 'JS Result':'Right back atcha!' }
+			responseCallback(responseData)
+    	});
+	});
+	</script>
+	
+	<script>
+	//系统版本
+	function getOSVersion()
+	{
+		var inputs = {'action': 'getOSVersion','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "系统版本："+FCDAPIObject.outputs.osversion;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//是否安卓设备
+	function IsAndroid()
+	{
+		var inputs = {'action': 'IsAndroid','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "是否安卓设备："+FCDAPIObject.outputs.result;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//是否Iphone设备
+	function IsIphone()
+	{
+		var inputs = {'action': 'IsIphone','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "是否Iphone设备："+FCDAPIObject.outputs.result;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//是否Ipad设备
+	function IsIpad()
+	{
+		var inputs = {'action': 'IsIpad','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "是否Ipad设备："+FCDAPIObject.outputs.result;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//获取IMSI编码(适用Android设备)
+	function getIMSI()
+	{
+		var inputs = {'action': 'getIMSI','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "获取IMSI编码："+FCDAPIObject.outputs.imsi;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//获取设备名称(适用iOS设备)
+	function getDeviceName()
+	{
+		var inputs = {'action': 'getDeviceName','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "获取设备名称："+FCDAPIObject.outputs.deviceName;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//获取应用提供商(适用iOS设备)
+	function getIDFV()
+	{
+		var inputs = {'action': 'getIDFV','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "获取应用提供商："+FCDAPIObject.outputs.idfv;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//设备分辨率_高度
+	function screenHeight()
+	{
+		var inputs = {'action': 'screenHeight','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "设备分辨率_高度："+FCDAPIObject.outputs.screenheight;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//设备分辨率_宽度
+	function screenWidth()
+	{
+		var inputs = {'action': 'screenWidth','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "设备分辨率_宽度："+FCDAPIObject.outputs.screenwidth;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	</script>
+</head>
+<body>
+<h4>设备信息</h4>
+<button type="button" onclick="getOSVersion()">系统版本</button>
+<button type="button" onclick="IsAndroid()">是否安卓设备</button>
+<button type="button" onclick="IsIphone()">是否Iphone设备</button>
+<button type="button" onclick="IsIpad()">是否Ipad设备</button>
+<button type="button" onclick="getIMSI()">获取IMSI编码(适用Android设备)</button><br>
+<button type="button" onclick="getDeviceName()">获取设备名称(适用iOS设备)</button><br>
+<button type="button" onclick="getIDFV()">获取应用提供商(适用iOS设备)</button><br>
+<button type="button" onclick="screenHeight()">设备分辨率_高度</button>
+<button type="button" onclick="screenWidth()">设备分辨率_宽度</button>
+<div id="outputs"></div>
+</body>
+</html>

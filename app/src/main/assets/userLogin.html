@@ -1,0 +1,111 @@
+<html>
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h4 { color:steelblue; font-size:24px; margin-top:5px; }
+		button { margin:0 3px 5px; font-size:12px; }
+        div {width:300px;height:300px;border:1px dashed #000}
+        input{width:250px;border:1px solid #000}
+	</style>
+    <script>
+        //绑定 WebViewJavascriptBridge事件对象
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge);
+            } else {
+                document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                                          callback(WebViewJavascriptBridge);
+                                          }, false);
+            }
+        }
+    //初始化 WebViewJavascriptBridge事件对象
+    connectWebViewJavascriptBridge(function(bridge) {
+                                   //初始化操作，并定义默认的消息处理逻辑
+                                   bridge.init(function(message, responseCallback) {
+                                               var data = { 'JS Result':'from javascript!' }
+                                               responseCallback(data)
+                                               });
+                                   //注册一个名为testJavascriptHandler的处理器，并定义用于响应的处理逻辑
+                                   bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
+                                                          var responseData = { 'JS Result':'Right back atcha!' }
+                                                          responseCallback(responseData)
+                                                          });
+                                   });
+        </script>
+	
+	<script>
+	//获取信息
+	function getuser()
+	{
+		var inputs = {'action': 'getUserInfo','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+               var str =  "用户id："+FCDAPIObject.outputs.userID+"</br>";
+                   str +=  "用户名："+FCDAPIObject.outputs.userName+"</br>";
+                   str +=  "类型："+FCDAPIObject.outputs.userType+"</br>";
+                   str +=  "实名状态："+FCDAPIObject.outputs.realNameCertificateStatus+"</br>";
+                   str +=  "姓氏："+FCDAPIObject.outputs.firstName+"</br>";
+                   str +=  "名字："+FCDAPIObject.outputs.lastName+"</br>";
+                   str +=  "身份证号："+FCDAPIObject.outputs.idCard+"</br>";
+                   str +=  "邮箱绑定："+FCDAPIObject.outputs.emailBindCertificateStatus+"</br>";
+                   str +=  "信箱："+FCDAPIObject.outputs.Email+"</br>";
+                   str +=  "token："+FCDAPIObject.outputs.token;
+                outputs.innerHTML = str;
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+	
+	//注销账户
+	function loginout()
+	{
+		var inputs = {'action': 'loginOut','inputs': {}};
+		window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+			var FCDAPIObject = new Function("return" + response)();
+			var outputs = document.getElementById('outputs');
+			if(FCDAPIObject.responseCode == '1'){
+				outputs.innerHTML = "注销账户成功";
+			}else{
+				outputs.innerHTML = FCDAPIObject.errorMessage;
+			}
+		});
+	}
+    //弹登录框
+    function poploginview()
+    {
+        var inputs = {'action': 'popLoginView','inputs': {}};
+        window.WebViewJavascriptBridge.callHandler('FCDeviceAPI', inputs, function(response) {
+            var FCDAPIObject = new Function("return" + response)();
+            var outputs = document.getElementById('outputs');
+            if(FCDAPIObject.responseCode == '1'){
+               var str =  "用户id："+FCDAPIObject.outputs.userID+"</br>";
+                   str +=  "用户名："+FCDAPIObject.outputs.userName+"</br>";
+                   str +=  "类型："+FCDAPIObject.outputs.userType+"</br>";
+                   str +=  "实名状态："+FCDAPIObject.outputs.realNameCertificateStatus+"</br>";
+                   str +=  "姓氏："+FCDAPIObject.outputs.firstName+"</br>";
+                   str +=  "名字："+FCDAPIObject.outputs.lastName+"</br>";
+                   str +=  "身份证号："+FCDAPIObject.outputs.idCard+"</br>";
+                   str +=  "邮箱绑定："+FCDAPIObject.outputs.emailBindCertificateStatus+"</br>";
+                   str +=  "信箱："+FCDAPIObject.outputs.Email+"</br>";
+                   str +=  "token："+FCDAPIObject.outputs.token;
+                outputs.innerHTML = str;
+            }else{
+                outputs.innerHTML = FCDAPIObject.errorMessage;
+            }
+        });
+    }
+	</script>
+</head>
+<body>
+<h4>用户账户</h4>
+<button type="button" onclick="getuser()">获取信息</button>
+<button type="button" onclick="loginout()">注销账户</button>
+<button type="button" onclick="poploginview()">弹登录框</button>
+<div id="outputs"></div>
+</body>
+</html>

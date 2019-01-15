@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <!-- webview 演示web调用Java -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar1"-->
+            <!--style="?android:attr/progressBarStyleHorizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:progressDrawable="@drawable/progressbar"-->
+
+            <!--/>-->
+
+        <!--<com.rjyx.webviewdemo.x5.X5WebView-->
+            <!--android:id="@+id/webView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1" >-->
+        <!--</com.rjyx.webviewdemo.x5.X5WebView>-->
+
+        <FrameLayout
+            android:id="@+id/webview_root_fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:progressDrawable="@drawable/progressbar"
+
+                />
+
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

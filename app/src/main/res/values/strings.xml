@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WebViewDubug</string>
+    <string name="app_title">调试浏览器控件</string>
+    <string name="webview_title">WebView控件</string>
+    <string name="bridge_title">BridgeWebView控件</string>
+    <string name="xfive_title">X5WebView控件</string>
+    <string name="xfive_bridge_title">X5BridgeWebView控件</string>
+</resources>

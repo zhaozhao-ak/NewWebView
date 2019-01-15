@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:24px; margin-top:24px; }
+		button { margin:0 3px 10px; font-size:12px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+        #customers{ font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;width:100%;border-collapse:collapse;}
+        #customers td, #customers th{ font-size:1em;border:1px solid #98bf21;padding:3px 7px 2px 7px;}
+        #customers th{ font-size:1.1em;text-align:left;padding-top:5px;padding-bottom:4px;background-color:#A7C942;color:#ffffff;width:50%}
+        #customers tr.alt td { color:#000000;background-color:#EAF2D3;}
+	</style>
+</head><body>
+	<h1>Objective-C功能列表</h1>
+	<script>
+	window.onerror = function(err) {
+		log('window.onerror: ' + err)
+	}
+	
+	function connectWebViewJavascriptBridge(callback) {
+		if (window.WebViewJavascriptBridge) {
+			callback(WebViewJavascriptBridge)
+		} else {
+			document.addEventListener('WebViewJavascriptBridgeReady', function() {
+				callback(WebViewJavascriptBridge)
+			}, false)
+		}
+	}
+	
+	connectWebViewJavascriptBridge(function(bridge) {
+
+		bridge.init(function(message, responseCallback) {
+
+			var data = { 'JS Result':'from javascript!' }
+
+			responseCallback(data)
+		})
+
+		bridge.registerHandler('testJavascriptHandler', function(data, responseCallback) {
+
+			var responseData = { 'JS Result':'Right back atcha!' }
+
+			responseCallback(responseData)
+		})
+
+		var button = document.getElementById('buttons').appendChild(document.createElement('button'))
+		button.innerHTML = '给ObjC对象发送消息'
+		button.onclick = function(e) {
+			e.preventDefault()
+			var data = 'Hello from JS button'
+
+			bridge.send(data, function(responseData) {
+
+			})
+		}
+
+		document.body.appendChild(document.createElement('br'))
+
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = '获取设备信息'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+
+			bridge.callHandler('getDeviceFromiOS', {'foo': 'bar'}, function(response) {
+                
+            var FCDevice = new Function("return" + response)();
+            var str =   "<table id=\"customers\"><tr><th>参数名</th><th>数值</th></tr>";
+            str +=  "<tr><td>设备名称：</td><td>" +FCDevice.name+"</td></tr>";
+            str +=  "<tr class=\"alt\"><td>设备类型：</td><td>" +FCDevice.model+"</td></tr>";
+            str +=  "<tr><td>本地化类型：</td><td>" +FCDevice.localizedModel+"</td></tr>";
+            str +=  "<tr class=\"alt\"><td>系统名称：</td><td>" +FCDevice.systemName+"</td></tr>";
+            str +=  "<tr><td>系统版本：</td><td>" +FCDevice.systemVersion+"</td></tr>";
+            str +=  "<tr class=\"alt\"><td>广告标示符：</td><td>" +FCDevice.IDFA+"</td></tr>";
+            str +=  "<tr><td>应用提供商：</td><td>" +FCDevice.IDFV+"</td></tr>";
+            str +=  "<tr class=\"alt\"><td>iPhone设备：</td><td>" +FCDevice.ISIPHONE+"</td></tr>";
+            //str +=  "<tr><td>iPad设备：</td><td>" +FCDevice.ISIPAD+"</td></tr>";
+            //str +=  "<tr class=\"alt\"><td>iPod设备：</td><td>" +FCDevice.ISIPOD+"</td></tr>";
+            str +=  "<tr><td>GPS位置：</td><td>" +FCDevice.GPSInfo+"</td></tr>";
+            str +=  "</table>";
+                
+            var table = document.getElementById('table');
+            table.innerHTML = str;
+			})
+		}
+	})
+	</script>
+	<div id='buttons'></div>
+    <div id='table'></div>
+    <div id='log'></div>
+</body></html>
